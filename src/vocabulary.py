@@ -1,0 +1,17 @@
+import os
+os.environ.setdefault("HF_HOME", "/goinfre/mohhnine/.cache/huggingface")
+
+from llm_sdk import Small_LLM_Model
+
+def load_vocabulary():
+    model = Small_LLM_Model()
+    vocab_path = model.get_path_to_vocab_file()
+    # with open(vocab_path, "r") as f:
+    #     result = f.read()
+    # print(result)
+    ids_lis = model.encode("what is the capital of paris ?")
+    re1 = model.get_logits_from_input_ids(ids_lis[0].tolist())
+    # print(ids_lis)
+    re = model.decode(max(re1[0]))
+    print(re)
+load_vocabulary()
