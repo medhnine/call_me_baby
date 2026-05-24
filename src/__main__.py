@@ -1,9 +1,11 @@
 """Entry point for the call-me-maybe function calling system."""
 
 import argparse
-import sys
-from typing import Optional
-
+from .parser import load_function_definitions, load_promts
+from .function_caller import function_caller
+from .decoder import ConstrainedDecoder
+from llm_sdk import Small_LLM_Model
+from .promt_builder import function_names
 
 def parse_arguments() -> argparse.Namespace:
     """Parse command line arguments.
@@ -34,15 +36,23 @@ def parse_arguments() -> argparse.Namespace:
     )
     return parser.parse_args()
 
-
 def main() -> None:
     """Run the function calling pipeline."""
     args = parse_arguments()
     print(f"Functions definition: {args.functions_definition}")
     print(f"Input file: {args.input}")
     print(f"Output file: {args.output}")
-
-
-
+    prompts = function_caller(args)
+    function_definitions = load_function_definitions(args.functions_definition)
+    fn_names = function_names(function_definitions)
+    if not prompts:
+        print("No prompts found")
+        return
+    model = Small_LLM_Model()
+    decoder = ConstrainedDecoder(model)
+    inputs_id = model.encode(prompts[0]).tolist()[0]
+    print(prompts[0])
+    generated_name = decoder.generate_function_name(inputs_id, fn_names)
+    print(generated_name)
 if __name__ == "__main__":
     main()
