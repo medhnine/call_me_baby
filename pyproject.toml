@@ -3,6 +3,15 @@ name = "call-me-maybe"
 version = "0.1.0"
 requires-python = ">=3.10"
 dependencies = [
+    "llm-sdk",
     "numpy",
     "pydantic",
 ]
+
+[tool.uv.workspace]
+members = [
+    "llm_sdk",
+]
+
+[tool.uv.sources]
+llm-sdk = { workspace = true }
