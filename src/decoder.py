@@ -3,7 +3,7 @@ from llm_sdk import Small_LLM_Model
 class ConstrainedDecoder:
     def __init__(self, model: Small_LLM_Model):
         self.model = model
-    def filter_logits(self, input_ids: list[int], store) -> int:
+    def filter_logits(self, input_ids: list[int], store: set[int]) -> int:
         logits: list = self.model.get_logits_from_input_ids(input_ids)
         return max(store, key=lambda log : logits[log])
 
@@ -18,7 +18,7 @@ class ConstrainedDecoder:
             next_token = self.filter_logits(input_ids, store)
             input_ids.append(next_token)
             fn_ids = [fn for fn in fn_ids if pos < len(fn) and fn[pos] == next_token]
-            if len(fn_ids) == 1:
+            if len(fn_ids) == 1 and pos == len(fn_ids[0]) - 1:
                 return (self.model.decode(fn_ids[0]))
             if not fn_ids:
                 raise ValueError(f"No surviving function after pruning at position {pos}")
