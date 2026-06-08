@@ -12,20 +12,19 @@ def build_prompt(user_prompt: str, function_definitions: list[FunctionDefinition
         prompt += ')'
         prompt += ": "  + fn.description
         prompt += ". Returns: " + fn.returns.type + '.\n\n'
-    prompt += "-fn_unknown: unknow function for that promt"
     prompt += "\n"
     prompt += "User request: " + user_prompt + "\n"
     prompt += "\n\nIMPORTANT: Choose the function"
     "whose description BEST matches the user prompt."
     prompt += "\nRead each function description carefully before choosing."
     prompt += "\nRespond with only the function name that matches.\n"
-    prompt += 'Output: {"name":'
+    prompt += 'Output: {"name": "'
     return prompt
 
 def function_names(function_definitions: list[FunctionDefinition]):
     Fn_names = []
     for fn in function_definitions:
-        Fn_names.append(fn.name)
+        Fn_names.append(fn.name + '"')
     return Fn_names
 
 # You are a function calling assistant. Given the user's request, output a JSON object with the function name and arguments.

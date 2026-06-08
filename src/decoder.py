@@ -15,14 +15,17 @@ class ConstrainedDecoder:
             fn_ids.append(token_list)
         while True:
             store = {item[pos] for item in fn_ids if pos < len(item)}
+            store.add(self.model.encode('"').tolist()[0][0])
             next_token = self.filter_logits(input_ids, store)
             input_ids.append(next_token)
             fn_ids = [fn for fn in fn_ids if pos < len(fn) and fn[pos] == next_token]
-            if len(fn_ids) == 1 and pos == len(fn_ids[0]) - 1:
+            if self.model.decode([next_token]) == '"':
+                print(self.model.decode(input_ids))
                 return (self.model.decode(fn_ids[0]))
             if not fn_ids:
                 raise ValueError(f"No surviving function after pruning at position {pos}")
             pos += 1
+        
 
 
 

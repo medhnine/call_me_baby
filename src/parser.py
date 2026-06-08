@@ -36,7 +36,7 @@ def load_promts(path:str)-> list[Prompt]:
         print(f"an error has been aquired {e}")
         sys.exit(1)
     return promts
-0
+
 def load_function_definitions(path:str)-> list[FunctionDefinition]:
     functions = []
     try:

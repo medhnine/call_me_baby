@@ -50,11 +50,13 @@ def main() -> None:
         return
     model = Small_LLM_Model()
     decoder = ConstrainedDecoder(model)
-    inputs_id = model.encode(prompts[0]).tolist()[0]
+    for name in ["fn_add_number", "fn_add_numbers"]:
+        ids = model.encode(name).tolist()[0]
+        print(f"{name:20} -> {ids}")
     for i in prompts:
         inputs_id = model.encode(i).tolist()[0]
         generated_name = decoder.generate_function_name(inputs_id, fn_names)
-        print(generated_name)
-
+        # print(generated_name)
+        return
 if __name__ == "__main__":
     main()
