@@ -45,14 +45,16 @@ def main() -> None:
     prompts = function_caller(args)
     function_definitions = load_function_definitions(args.functions_definition)
     fn_names = function_names(function_definitions)
+    print(fn_names)
     if not prompts:
         print("No prompts found")
         return
     model = Small_LLM_Model()
     decoder = ConstrainedDecoder(model)
     inputs_id = model.encode(prompts[0]).tolist()[0]
-    print(prompts[0])
-    generated_name = decoder.generate_function_name(inputs_id, fn_names)
-    print(generated_name)
+    for i in prompts:
+        inputs_id = model.encode(i).tolist()[0]
+        generated_name = decoder.generate_function_name(inputs_id, fn_names)
+        print(generated_name)
 if __name__ == "__main__":
     main()

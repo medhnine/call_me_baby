@@ -3,18 +3,19 @@ from llm_sdk import Small_LLM_Model
 class ConstrainedDecoder:
     def __init__(self, model: Small_LLM_Model):
         self.model = model
-    def filter_logits(self, input_ids: list[int]) -> int:
+    def filter_logits(self, input_ids: list[int], store) -> int:
         logits: list = self.model.get_logits_from_input_ids(input_ids)
-        return max(range(len(logits)), key=logits.__getitem__)
+        return max(store, key=lambda log : logits[log])
 
     def generate_function_name(self, input_ids: list[int], function_names: list[str]) -> str:
         pos = 0
+        fn_ids = []
+        for fn in function_names:
+            token_list = self.model.encode(fn).tolist()[0]
+            fn_ids.append(token_list)
         while True:
-            fn_ids = []
-            for fn in function_names:
-                token_list = self.model.encode(fn).tolist()[0]
-                fn_ids.append(token_list)
-            next_token = self.filter_logits(input_ids)
+            store = {item[pos] for item in fn_ids if pos < len(item)}
+            next_token = self.filter_logits(input_ids, store)
             input_ids.append(next_token)
             fn_ids = [fn for fn in fn_ids if pos < len(fn) and fn[pos] == next_token]
             if len(fn_ids) == 1:
@@ -22,7 +23,6 @@ class ConstrainedDecoder:
             if not fn_ids:
                 raise ValueError(f"No surviving function after pruning at position {pos}")
             pos += 1
-        return None
 
 
 
