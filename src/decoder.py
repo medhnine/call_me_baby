@@ -17,16 +17,27 @@ class ConstrainedDecoder:
             store = {item[pos] for item in fn_ids if pos < len(item)}
             store.add(self.model.encode('"').tolist()[0][0])
             next_token = self.filter_logits(input_ids, store)
-            input_ids.append(next_token)
             fn_ids = [fn for fn in fn_ids if pos < len(fn) and fn[pos] == next_token]
+            input_ids.append(next_token)
             if self.model.decode([next_token]) == '"':
-                return (self.model.decode(fn_ids[0]))
+                print(self.model.decode(fn_ids[0]))
+                return (self.model.decode(fn_ids[0][:-1]))
             if not fn_ids:
                 raise ValueError(f"No surviving function after pruning at position {pos}")
             pos += 1
-    def generate_paramters(self, functions_obj, input_ids, user_promt):
-        fn
-        pass
+    
+    def force_tokens(self, tokens : str, input_ids):
+        ids = self.model.encode(tokens).tolist()[0]
+        input_ids.extend(ids)
+
+    def generate_paramters(self, fn_name, fns_obj, input_ids):
+        for fn in fns_obj:
+            if fn.name == fn_name:
+                for key , val in fn.parameters.items():
+                    print(key)
+                # print(fn.parameters.items())
+                # self.force_tokens(fn.parameters.items()[0])
+            break
         
 
 
