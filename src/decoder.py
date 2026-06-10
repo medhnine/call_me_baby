@@ -20,11 +20,13 @@ class ConstrainedDecoder:
             input_ids.append(next_token)
             fn_ids = [fn for fn in fn_ids if pos < len(fn) and fn[pos] == next_token]
             if self.model.decode([next_token]) == '"':
-                print(self.model.decode(input_ids))
                 return (self.model.decode(fn_ids[0]))
             if not fn_ids:
                 raise ValueError(f"No surviving function after pruning at position {pos}")
             pos += 1
+    def generate_paramters(self, functions_obj, input_ids, user_promt):
+        fn
+        pass
         
 
 

@@ -43,6 +43,7 @@ def main() -> None:
     print(f"Input file: {args.input}")
     print(f"Output file: {args.output}")
     prompts = function_caller(args)
+    user_pormts = load_promts(args.input)
     function_definitions = load_function_definitions(args.functions_definition)
     fn_names = function_names(function_definitions)
     if not prompts:
@@ -50,13 +51,15 @@ def main() -> None:
         return
     model = Small_LLM_Model()
     decoder = ConstrainedDecoder(model)
-    for name in ["fn_add_number", "fn_add_numbers"]:
-        ids = model.encode(name).tolist()[0]
-        print(f"{name:20} -> {ids}")
     for i in prompts:
         inputs_id = model.encode(i).tolist()[0]
         generated_name = decoder.generate_function_name(inputs_id, fn_names)
-        # print(generated_name)
-        return
+        x = model.encode(f'"prompt": "{user_pormts[0]}",').tolist()[0]
+        print(model.decode(x))
+        # inputs_id.append(model.encode(f'"prompt": "{i}",').tolist()[0])
+        print(model.decode(inputs_id))
+        break
+    # for fn in function_definitions:
+    #     decoder.generate_paramters(fn, inputs_id,)
 if __name__ == "__main__":
     main()
