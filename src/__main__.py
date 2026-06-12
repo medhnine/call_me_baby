@@ -55,16 +55,19 @@ def main() -> None:
         inputs_id = model.encode(i).tolist()[0]
         generated_name = decoder.generate_function_name(inputs_id, fn_names)
         decoder.force_tokens(f',"prompt": "{user_pormts[0].prompt}",', inputs_id)
-        decoder.force_tokens(f'"parameters": "', inputs_id)
+        decoder.force_tokens('"parameters": {', inputs_id)
         
         # x = model.encode(f'prompt": "{user_pormts[0]},').tolist()[0]
         # print(model.decode(x))
         # inputs_id.append(model.encode(f'"prompt": "{i}",').tolist()[0])
         # print(inputs_id)
-        print(model.decode(inputs_id))
         decoder.generate_paramters(generated_name, function_definitions, inputs_id)
+        print(model.decode(inputs_id))
         break
     # for fn in function_definitions:
     #     decoder.generate_paramters(fn, inputs_id,)
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("Interrupted by user")

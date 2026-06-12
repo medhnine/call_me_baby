@@ -14,10 +14,7 @@ def build_prompt(user_prompt: str, function_definitions: list[FunctionDefinition
         prompt += ". Returns: " + fn.returns.type + '.\n\n'
     prompt += "\n"
     prompt += "User request: " + user_prompt + "\n"
-    prompt += "\n\nIMPORTANT: Choose the function"
-    "whose description BEST matches the user prompt."
-    prompt += "\nRead each function description carefully before choosing."
-    prompt += "\nRespond with only the function name that matches.\n"
+    prompt += "generate - if the values in the user request are negative"
     prompt += 'Output: {"name": "'
     return prompt
 
