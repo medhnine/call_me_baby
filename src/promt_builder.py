@@ -13,8 +13,8 @@ def build_prompt(user_prompt: str, function_definitions: list[FunctionDefinition
         prompt += ": "  + fn.description
         prompt += ". Returns: " + fn.returns.type + '.\n\n'
     prompt += "\n"
+    prompt += "- For regex parameters, generate a valid regex, pattern (e.g use [...] not ...)\n\n"
     prompt += "User request: " + user_prompt + "\n"
-    prompt += "generate - if the values in the user request are negative"
     prompt += 'Output: {"name": "'
     return prompt
 

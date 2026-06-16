@@ -1,9 +1,15 @@
 [
   {
-    "prompt": "What is the sum of -2 and 3?"
+    "prompt": "What is the square root of 16?"
   },
   {
-    "prompt": "What is the sum of 265 and 345?"
+    "prompt": "What is the sum of -265 and -345?"
+  },
+  {
+    "prompt": "What is the sum of 2 and -3?"
+  },
+  {
+    "prompt": "Reverse the string 'hello'"
   },
   {
     "prompt": "Greet shrek"
@@ -12,13 +18,7 @@
     "prompt": "Greet john"
   },
   {
-    "prompt": "Reverse the string 'hello'"
-  },
-  {
     "prompt": "Reverse the string 'world'"
-  },
-  {
-    "prompt": "What is the square root of 16?"
   },
   {
     "prompt": "Calculate the square root of 144"
