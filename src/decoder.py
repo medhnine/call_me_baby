@@ -62,15 +62,17 @@ class ConstrainedDecoder:
                 pos = 0
                 for key , val in fn.parameters.items():
                     res = '"' + key
-                    if pos + 1 < len(fn.parameters):
+                    if pos + 1 <= len(fn.parameters):
                         res += '"'
                     self.force_tokens(res, input_ids)
-                    self.force_tokens(':', input_ids)
                     if val.type == 'number':
+                        self.force_tokens(':', input_ids)
                         self.generate_number(input_ids)
                     if val.type == 'string':
+                        self.force_tokens(': ', input_ids)
                         input_ids.append(self.model.encode('"').tolist()[0][0])
                         self.generate_string(input_ids)
+                    pos += 1
 
 
     # def decode_number(client: LLMClient, prompt_context_ids: list[int]) -> list[int]:

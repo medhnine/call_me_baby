@@ -53,17 +53,15 @@ def main() -> None:
     decoder = ConstrainedDecoder(model)
     for i, x in zip(prompts, user_pormts):
         inputs_id = model.encode(i).tolist()[0]
+        add = model.encode('{"name": "').tolist()[0]
+        inputs_id.extend(add)
         generated_name = decoder.generate_function_name(inputs_id, fn_names)
         target = f',"prompt": "{x.prompt}",'
         decoder.force_tokens(target, inputs_id)
         decoder.force_tokens('"parameters": {', inputs_id)
-        
-        # x = model.encode(f'prompt": "{user_pormts[0]},').tolist()[0]
-        # print(model.decode(x))
-        # inputs_id.append(model.encode(f'"prompt": "{i}",').tolist()[0])
-        # print(inputs_id)
         decoder.generate_paramters(generated_name, function_definitions, inputs_id)
-        print(model.decode(inputs_id))
+        # print(model.decode(inputs_id))
+        print(model.decode(inputs_id[inputs_id.index(add[0]):]))
         print()
     # for fn in function_definitions:
     #     decoder.generate_paramters(fn, inputs_id,)
