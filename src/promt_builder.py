@@ -11,10 +11,9 @@ def build_prompt(user_prompt: str, function_definitions: list[FunctionDefinition
         prompt += ')'
         prompt += ": "  + fn.description
         prompt += ". Returns: " + fn.returns.type + '.\n\n'
-    prompt += "\n"
-    # prompt += "- For regex parameters, generate a valid regex, pattern (e.g use [...] not ...)\n\n"
+    prompt += "- For regex parameters, generate a valid regex"
+    prompt += "pattern (e.g use [...] not ...)\n"
     prompt += "User request: " + user_prompt + "\n"
-    prompt += 'Output: '
     return prompt
 
 def function_names(function_definitions: list[FunctionDefinition]):

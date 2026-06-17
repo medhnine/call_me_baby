@@ -35,7 +35,6 @@ class ConstrainedDecoder:
             count += 1
         if data[length - 2] != '}':
             count += 1
-        print(count)
         for _ in range(0, count):
             self.force_tokens('}', input_ids)
     def generate_number(self, input_ids):
@@ -55,7 +54,6 @@ class ConstrainedDecoder:
                     print(e)
                     return
                 input_ids.extend(self.model.encode(' ' + str(fl)).tolist()[0])
-                input_ids.append(next_token)
                 return
             else:
                 result.append(next_token)
@@ -65,14 +63,16 @@ class ConstrainedDecoder:
         while True:
             logits = self.model.get_logits_from_input_ids(input_ids + result)
             next_token = logits.index(max(logits))
-            result.append(next_token)
             if '"' in self.model.decode(next_token):
                 return result
-
+            else:
+                result.append(next_token)
+ 
     def generate_paramters(self, fn_name, fns_obj, input_ids):
         for fn in fns_obj:
             if fn.name == fn_name:
                 pos = 0
+                count = len(input_ids)
                 for key , val in fn.parameters.items():
                     res = '"' + key
                     if pos + 1 <= len(fn.parameters):
@@ -81,12 +81,26 @@ class ConstrainedDecoder:
                     if val.type == 'number':
                         self.force_tokens(':', input_ids)
                         self.generate_number(input_ids)
+                        if pos < len(fn.parameters) - 1:
+                            input_ids.append(self.model.encode(',').tolist()[0][0])
+                            input_ids.append(self.model.encode(' ').tolist()[0][0])
+                        if pos == len(fn.parameters) - 1:
+                            input_ids.append(self.model.encode('}').tolist()[0][0])
+                            input_ids.append(self.model.encode('}').tolist()[0][0])
                     if val.type == 'string':
-                        self.force_tokens(':', input_ids)
+                        self.force_tokens(': ', input_ids)
                         input_ids.append(self.model.encode('"').tolist()[0][0])
                         res = self.generate_string(input_ids)
                         input_ids.extend(res)
+                        input_ids.append(self.model.encode('"').tolist()[0][0])
+                        if pos < len(fn.parameters) - 1:
+                            input_ids.append(self.model.encode(',').tolist()[0][0])
+                            input_ids.append(self.model.encode(' ').tolist()[0][0])
+                        if pos == len(fn.parameters) - 1:
+                            input_ids.append(self.model.encode('}').tolist()[0][0])
+                            input_ids.append(self.model.encode('}').tolist()[0][0])
                     pos += 1
+                return(count)
 
 
     # def decode_number(client: LLMClient, prompt_context_ids: list[int]) -> list[int]:

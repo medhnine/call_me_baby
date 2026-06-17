@@ -61,20 +61,19 @@ def main() -> None:
         add = model.encode('{"name": "').tolist()[0]
         input_ids.extend(add)
         generated_name = decoder.generate_function_name(input_ids, fn_names)
-        target = f',"prompt": "{x.prompt}",'
+        target = f',"prompt": "{x.prompt}", '
         decoder.force_tokens(target, input_ids)
         decoder.force_tokens('"parameters": {', input_ids)
         decoder.generate_paramters(generated_name, function_definitions, input_ids)
         data = model.decode(input_ids[input_ids.index(add[0]):])
         print(data)
-        decoder.state_force(data, input_ids)
-        data = model.decode(input_ids[input_ids.index(add[0]):])
-        print(data)
-        data_d = json.loads(data)
-        print(data_d)
-        print()
-        list_objects.append(data_d)
-    print(list_objects)
+        res = ast.literal_eval(data)
+        print(res)
+        # data_d = json.loads(data)
+        # print(data_d)
+        # # print()
+        # list_objects.append(data_d)
+    print([list_objects])
     with open("data/output/output.json", "w") as f:
         json.dump(list_objects, f, indent=4)
         # json_s = json.dumps(data)
