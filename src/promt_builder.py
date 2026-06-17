@@ -1,8 +1,7 @@
 from src.parser import FunctionDefinition
 
 def build_prompt(user_prompt: str, function_definitions: list[FunctionDefinition]) -> str:
-    prompt = "You are a function calling assistant. Given the user's request, output a JSON object with the function name and arguments.\n\n"
-    prompt += "Available functions:\n"
+    prompt = "Available functions:\n"
     for fn in function_definitions:
         prompt += '- ' + fn.name
         prompt += "("
@@ -13,7 +12,7 @@ def build_prompt(user_prompt: str, function_definitions: list[FunctionDefinition
         prompt += ": "  + fn.description
         prompt += ". Returns: " + fn.returns.type + '.\n\n'
     prompt += "\n"
-    prompt += "- For regex parameters, generate a valid regex, pattern (e.g use [...] not ...)\n\n"
+    # prompt += "- For regex parameters, generate a valid regex, pattern (e.g use [...] not ...)\n\n"
     prompt += "User request: " + user_prompt + "\n"
     prompt += 'Output: '
     return prompt

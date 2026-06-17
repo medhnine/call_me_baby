@@ -6,7 +6,11 @@ from .function_caller import function_caller
 from .decoder import ConstrainedDecoder
 from llm_sdk import Small_LLM_Model
 from .promt_builder import function_names
+import json
+import os
+import ast
 
+os.makedirs("data/output", exist_ok=True)
 def parse_arguments() -> argparse.Namespace:
     """Parse command line arguments.
 
@@ -51,18 +55,32 @@ def main() -> None:
         return
     model = Small_LLM_Model()
     decoder = ConstrainedDecoder(model)
+    list_objects = []
     for i, x in zip(prompts, user_pormts):
-        inputs_id = model.encode(i).tolist()[0]
+        input_ids = model.encode(i).tolist()[0]
         add = model.encode('{"name": "').tolist()[0]
-        inputs_id.extend(add)
-        generated_name = decoder.generate_function_name(inputs_id, fn_names)
+        input_ids.extend(add)
+        generated_name = decoder.generate_function_name(input_ids, fn_names)
         target = f',"prompt": "{x.prompt}",'
-        decoder.force_tokens(target, inputs_id)
-        decoder.force_tokens('"parameters": {', inputs_id)
-        decoder.generate_paramters(generated_name, function_definitions, inputs_id)
-        # print(model.decode(inputs_id))
-        print(model.decode(inputs_id[inputs_id.index(add[0]):]))
+        decoder.force_tokens(target, input_ids)
+        decoder.force_tokens('"parameters": {', input_ids)
+        decoder.generate_paramters(generated_name, function_definitions, input_ids)
+        data = model.decode(input_ids[input_ids.index(add[0]):])
+        print(data)
+        decoder.state_force(data, input_ids)
+        data = model.decode(input_ids[input_ids.index(add[0]):])
+        print(data)
+        data_d = json.loads(data)
+        print(data_d)
         print()
+        list_objects.append(data_d)
+    print(list_objects)
+    with open("data/output/output.json", "w") as f:
+        json.dump(list_objects, f, indent=4)
+        # json_s = json.dumps(data)
+        # print()
+        # print(json_s)
+        # print()
     # for fn in function_definitions:
     #     decoder.generate_paramters(fn, inputs_id,)
 if __name__ == "__main__":

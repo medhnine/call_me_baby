@@ -28,8 +28,16 @@ class ConstrainedDecoder:
     def force_tokens(self, tokens : str, input_ids):
         ids = self.model.encode(tokens).tolist()[0]
         input_ids.extend(ids)
-
-
+    def state_force(self, data:str, input_ids):
+        length = len(data)
+        count = 0
+        if data[length - 1] != '}':
+            count += 1
+        if data[length - 2] != '}':
+            count += 1
+        print(count)
+        for _ in range(0, count):
+            self.force_tokens('}', input_ids)
     def generate_number(self, input_ids):
         result = []
         while True:
@@ -37,8 +45,12 @@ class ConstrainedDecoder:
             next_token = logits.index(max(logits))
             if ',' in self.model.decode([next_token]) or '}' in self.model.decode([next_token]):
                 res = self.model.decode(result)
+                num = ''
                 try:
-                    fl = float(res)
+                    for chr in res:
+                        if chr in '.-0123456789':
+                            num += chr
+                    fl = float(num)
                 except Exception as e:
                     print(e)
                     return
@@ -49,12 +61,13 @@ class ConstrainedDecoder:
                 result.append(next_token)
 
     def generate_string(self, input_ids):
+        result = []
         while True:
-            logits = self.model.get_logits_from_input_ids(input_ids)
+            logits = self.model.get_logits_from_input_ids(input_ids + result)
             next_token = logits.index(max(logits))
-            input_ids.append(next_token)
+            result.append(next_token)
             if '"' in self.model.decode(next_token):
-                return
+                return result
 
     def generate_paramters(self, fn_name, fns_obj, input_ids):
         for fn in fns_obj:
@@ -69,9 +82,10 @@ class ConstrainedDecoder:
                         self.force_tokens(':', input_ids)
                         self.generate_number(input_ids)
                     if val.type == 'string':
-                        self.force_tokens(': ', input_ids)
+                        self.force_tokens(':', input_ids)
                         input_ids.append(self.model.encode('"').tolist()[0][0])
-                        self.generate_string(input_ids)
+                        res = self.generate_string(input_ids)
+                        input_ids.extend(res)
                     pos += 1
 
 
