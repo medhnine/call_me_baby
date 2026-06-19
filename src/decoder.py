@@ -54,7 +54,7 @@ class ConstrainedDecoder:
                     print(e)
                     return
                 input_ids.extend(self.model.encode(' ' + str(fl)).tolist()[0])
-                return
+                return fl
             else:
                 result.append(next_token)
 
@@ -72,7 +72,7 @@ class ConstrainedDecoder:
         for fn in fns_obj:
             if fn.name == fn_name:
                 pos = 0
-                count = len(input_ids)
+                output = {}
                 for key , val in fn.parameters.items():
                     res = '"' + key
                     if pos + 1 <= len(fn.parameters):
@@ -80,9 +80,9 @@ class ConstrainedDecoder:
                     self.force_tokens(res, input_ids)
                     if val.type == 'number':
                         self.force_tokens(':', input_ids)
-                        self.generate_number(input_ids)
+                        output[key] = self.generate_number(input_ids)
                         if pos < len(fn.parameters) - 1:
-                            input_ids.append(self.model.encode(',').tolist()[0][0])
+                            input_ids.append(self.model.encode(', ').tolist()[0][0])
                             input_ids.append(self.model.encode(' ').tolist()[0][0])
                         if pos == len(fn.parameters) - 1:
                             input_ids.append(self.model.encode('}').tolist()[0][0])
@@ -91,6 +91,7 @@ class ConstrainedDecoder:
                         self.force_tokens(': ', input_ids)
                         input_ids.append(self.model.encode('"').tolist()[0][0])
                         res = self.generate_string(input_ids)
+                        output[key] = self.model.decode(res)
                         input_ids.extend(res)
                         input_ids.append(self.model.encode('"').tolist()[0][0])
                         if pos < len(fn.parameters) - 1:
@@ -100,7 +101,7 @@ class ConstrainedDecoder:
                             input_ids.append(self.model.encode('}').tolist()[0][0])
                             input_ids.append(self.model.encode('}').tolist()[0][0])
                     pos += 1
-                return(count)
+                return output
 
 
     # def decode_number(client: LLMClient, prompt_context_ids: list[int]) -> list[int]:

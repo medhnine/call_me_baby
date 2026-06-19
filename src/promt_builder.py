@@ -11,8 +11,8 @@ def build_prompt(user_prompt: str, function_definitions: list[FunctionDefinition
         prompt += ')'
         prompt += ": "  + fn.description
         prompt += ". Returns: " + fn.returns.type + '.\n\n'
-    prompt += "- For regex parameters, generate a valid regex"
-    prompt += "pattern (e.g use [...] not ...)\n"
+    # prompt += "- For regex parameters, generate a valid regex"
+    # prompt += "pattern (e.g use [...] not ...)\n"
     prompt += "User request: " + user_prompt + "\n"
     return prompt
 
@@ -22,7 +22,7 @@ def function_names(function_definitions: list[FunctionDefinition]):
         Fn_names.append(fn.name + '"')
     return Fn_names
 
-# You are a function calling assistant. Given the user's request, output a JSON object with the function name and arguments.
+
 
 # Available functions:
 # - fn_add_numbers: Add two numbers together and return their sum. Parameters: a (number), b (number). Returns: number.
