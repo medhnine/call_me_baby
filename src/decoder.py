@@ -28,6 +28,7 @@ class ConstrainedDecoder:
     def force_tokens(self, tokens : str, input_ids):
         ids = self.model.encode(tokens).tolist()[0]
         input_ids.extend(ids)
+
     def state_force(self, data:str, input_ids):
         length = len(data)
         count = 0
@@ -37,7 +38,8 @@ class ConstrainedDecoder:
             count += 1
         for _ in range(0, count):
             self.force_tokens('}', input_ids)
-    def generate_number(self, input_ids):
+            
+    def generate_number(self, input_ids, point):
         result = []
         while True:
             logits = self.model.get_logits_from_input_ids(input_ids + result)
@@ -49,7 +51,9 @@ class ConstrainedDecoder:
                     for chr in res:
                         if chr in '.-0123456789':
                             num += chr
-                    fl = float(num)
+                    fl = num
+                    if point == False:
+                        fl = float(num)
                 except Exception as e:
                     print(e)
                     return
@@ -58,11 +62,17 @@ class ConstrainedDecoder:
             else:
                 result.append(next_token)
 
-    def generate_string(self, input_ids):
+    def generate_string(self, input_ids, boolean):
         result = []
         while True:
             logits = self.model.get_logits_from_input_ids(input_ids + result)
-            next_token = logits.index(max(logits))
+            if boolean:
+                allowd = self.model.encode("True").tolist()[0]
+                allowd += self.model.encode("False").tolist()[0]
+                allowd += self.model.encode('"').tolist()[0]
+                next_token = max(allowd, key=lambda log : logits[log])
+            else:
+                next_token = logits.index(max(logits))
             if '"' in self.model.decode(next_token):
                 return result
             else:
@@ -78,19 +88,25 @@ class ConstrainedDecoder:
                     if pos + 1 <= len(fn.parameters):
                         res += '"'
                     self.force_tokens(res, input_ids)
-                    if val.type == 'number':
+                    if val.type in ["number", "int", "float"]:
                         self.force_tokens(':', input_ids)
-                        output[key] = self.generate_number(input_ids)
+                        if val.type == "int":
+                            output[key] = self.generate_number(input_ids, True)
+                        else:
+                            output[key] = self.generate_number(input_ids, False)
                         if pos < len(fn.parameters) - 1:
                             input_ids.append(self.model.encode(', ').tolist()[0][0])
                             input_ids.append(self.model.encode(' ').tolist()[0][0])
                         if pos == len(fn.parameters) - 1:
                             input_ids.append(self.model.encode('}').tolist()[0][0])
                             input_ids.append(self.model.encode('}').tolist()[0][0])
-                    if val.type == 'string':
+                    if val.type in ["string", "boolean"]:
                         self.force_tokens(': ', input_ids)
                         input_ids.append(self.model.encode('"').tolist()[0][0])
-                        res = self.generate_string(input_ids)
+                        if val.type == "boolean":
+                            res = self.generate_string(input_ids, True)
+                        else:
+                            res = self.generate_string(input_ids, False)
                         output[key] = self.model.decode(res)
                         input_ids.extend(res)
                         input_ids.append(self.model.encode('"').tolist()[0][0])
@@ -102,120 +118,3 @@ class ConstrainedDecoder:
                             input_ids.append(self.model.encode('}').tolist()[0][0])
                     pos += 1
                 return output
-
-
-    # def decode_number(client: LLMClient, prompt_context_ids: list[int]) -> list[int]:
-    #     digit_tokens = {client.encode(d)[0] for d in "0123456789."}
-    #     comma = client.encode(",")[0]
-    #     brace = client.encode("}")[0]
-    #     minus = client.encode(" -")[0]
-    #     allowed = digit_tokens | {comma, brace, minus}
-    #     valueids = []
-    #     for  in range(35):
-    #         logits = client.get_logits(prompt_context_ids + value_ids)
-    #         for index in range(len(logits)):
-    #             if index not in allowed:
-    #                 logits[index] = float("-inf")
-    #         next_token = logits.index(max(logits))
-    #         print(f'this score of minus{logits[minus]}')
-    #         print(f'this score of next_token{logits[next_token]}')
-    #         if next_token in (comma, brace):
-    #             break
-    #         value_ids.append(next_token)
-    #     return value_ids
-    
-    # def generate_number(self, input_ids):
-    #         digits = self.model.encode('0123456789').tolist()[0]
-    #         stop_chrs = self.model.encode(',}').tolist()[0]
-    #         point = self.model.encode('.').tolist()[0]
-    #         minus = self.model.encode(' -').tolist()[0]
-    #         allowed = []
-    #         allowed += digits  + stop_chrs + minus + point
-    #         while True:
-    #             for x in range(5):
-    #                 logits = self.model.get_logits_from_input_ids(input_ids)
-    #                 if x == 0:
-    #                     for log in range(len(logits)):
-    #                         if logits.index(logits[log]) not in allowed:
-    #                             logits[log] = float("-inf")
-    #                 next_id = max(allowed, key=lambda log : logits[log])
-    #                 print(f'score of minus {logits[minus[0]]}')
-    #                 print(f'score of next_id {logits[next_id]}')
-    #                 print()
-    #                 input_ids.append(next_id)
-    #                 if next_id in stop_chrs:
-    #                     return
-    #             break
-
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def generate_number(self, input_ids):
-#             allowed_chrs = '-0123456789,}."'
-#             stop_chrs = self.model.encode(',}').tolist()[0]
-#             allowed = self.model.encode(allowed_chrs).tolist()[0]
-#             next_token = self.model.encode('+').tolist()[0][0]
-#             ids_copy = input_ids.copy()
-#             pos = 0
-#             result = []
-#             while True:
-#                 logits = self.model.get_logits_from_input_ids(input_ids)
-#                 next_token = max(allowed, key=lambda log : logits[log])
-#                 input_ids.append(next_token)
-#                 # if next_token in self.model.encode(".0123456789").tolist()[0]:
-#                 #     result.append(next_token)
-#                 if next_token in stop_chrs:
-#                     # number = float(self.model.decode(result))
-#                     # res = self.model.encode(str(number)).tolist()[0]
-#                     # res.append(next_token)
-#                     return
-#                 # if pos == 0:
-#                 #     digits_ids = self.model.encode("0123456789").tolist()[0]
-#                 #     minsign_id = self.model.encode(' -').tolist()[0][0]
-#                 #     alloweds = digits_ids + [minsign_id]
-#                 #     logits = self.model.get_logits_from_input_ids(ids_copy)
-#                 #     next_token = max(alloweds, key=lambda log : logits[log])
-#                 #     if next_token == minsign_id:
-#                 #         res = self.model.encode(' -').tolist()[0][0]
-#                 #         result.append(res)
-#                 #         ids_copy.append(res)
-#                 # else:
-#                 # logits = self.model.get_logits_from_input_ids(ids_copy)
-#                 # next_token = max(allowed, key=lambda log : logits[log])
-#                 # print(f'this is the value {self.model.decode([next_token])}')
-#                 # print(f'score d point {logits[self.model.encode('.').tolist()[0][0]]}')
-#                 # print(f'score d nexttoken {logits[next_token]}')
-
-#                 # ids_copy.append(next_token)
-#                 # pos += 1

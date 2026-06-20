@@ -8,7 +8,6 @@ from llm_sdk import Small_LLM_Model
 from .promt_builder import function_names
 import json
 import os
-import ast
 
 os.makedirs("data/output", exist_ok=True)
 def parse_arguments() -> argparse.Namespace:
@@ -76,20 +75,10 @@ def main() -> None:
         print(data)
         print()
         print(res)
-        # res = ast.literal_eval(data)
-        # print(res)
-        # data_d = json.loads(data)
-        # print(data_d)
-        # # print()
-        # list_objects.append(data_d)
+
     with open("data/output/output.json", "w") as f:
         json.dump(list_objects, f, indent=4)
-        # json_s = json.dumps(data)
-        # print()
-        # print(json_s)
-        # print()
-    # for fn in function_definitions:
-    #     decoder.generate_paramters(fn, inputs_id,)
+   
 if __name__ == "__main__":
     try:
         main()

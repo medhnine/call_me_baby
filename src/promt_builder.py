@@ -11,8 +11,6 @@ def build_prompt(user_prompt: str, function_definitions: list[FunctionDefinition
         prompt += ')'
         prompt += ": "  + fn.description
         prompt += ". Returns: " + fn.returns.type + '.\n\n'
-    # prompt += "- For regex parameters, generate a valid regex"
-    # prompt += "pattern (e.g use [...] not ...)\n"
     prompt += "User request: " + user_prompt + "\n"
     return prompt
 
@@ -21,14 +19,3 @@ def function_names(function_definitions: list[FunctionDefinition]):
     for fn in function_definitions:
         Fn_names.append(fn.name + '"')
     return Fn_names
-
-
-
-# Available functions:
-# - fn_add_numbers: Add two numbers together and return their sum. Parameters: a (number), b (number). Returns: number.
-# - fn_greet: Generate a greeting message for a person by name. Parameters: name (string). Returns: string.
-# - fn_reverse_string: Reverse a string and return the reversed result. Parameters: s (string). Returns: string.
-
-# User request: Reverse the string 'hello'
-
-
