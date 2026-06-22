@@ -76,7 +76,7 @@ def main() -> None:
         print()
         print(res)
 
-    with open("data/output/output.json", "w") as f:
+    with open(args.output, "w") as f:
         json.dump(list_objects, f, indent=4)
    
 if __name__ == "__main__":

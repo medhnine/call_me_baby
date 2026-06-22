@@ -66,13 +66,16 @@ class ConstrainedDecoder:
         result = []
         while True:
             logits = self.model.get_logits_from_input_ids(input_ids + result)
-            if boolean:
-                allowd = self.model.encode("True").tolist()[0]
-                allowd += self.model.encode("False").tolist()[0]
-                allowd += self.model.encode('"').tolist()[0]
-                next_token = max(allowd, key=lambda log : logits[log])
-            else:
-                next_token = logits.index(max(logits))
+            # if boolean:
+            #     allowd = self.model.encode("True").tolist()[0]
+            #     allowd += self.model.encode("False").tolist()[0]
+            #     allowd += self.model.encode(" false").tolist()[0]
+            #     allowd = self.model.encode(" true").tolist()[0]
+            #     allowd += self.model.encode('"').tolist()[0]
+            #     next_token = max(allowd, key=lambda log : logits[log])
+            # else:
+            next_token = logits.index(max(logits))
+            # print(self.model.decode([next_token]))
             if '"' in self.model.decode(next_token):
                 return result
             else:

@@ -1,35 +1,38 @@
 [
   {
-    "prompt": "What is the sum of 2 and 3?"
+    "prompt": "What is the sum of 2.5 and 3.5?"
   },
   {
-    "prompt": "What is the sum of 265 and 345?"
+    "prompt": "What is the sum of 999999999999 and 1?"
   },
   {
-    "prompt": "Greet shrek"
+    "prompt": "What is the sum of -8 and 5?"
   },
   {
-    "prompt": "Greet john"
+    "prompt": "Add the two numbers together"
   },
   {
-    "prompt": "Reverse the string 'hello'"
+    "prompt": "Set the temperature to 22 degrees celsius"
   },
   {
-    "prompt": "Reverse the string 'world'"
+    "prompt": "Set the thermostat to 451 fahrenheit"
   },
   {
-    "prompt": "What is the square root of 16?"
+    "prompt": "Enable the dark_mode feature"
   },
   {
-    "prompt": "Calculate the square root of 144"
+    "prompt": "Turn off notifications"
   },
   {
-    "prompt": "Replace all numbers in \"Hello 34 I'm 233 years old\" with NUMBERS"
+    "prompt": "Update the firmware on device router7 to v2.0"
   },
   {
-    "prompt": "Replace all vowels in 'Programming is fun' with asterisks"
+    "prompt": "Update the firmware on sensorX to the latest beta build"
   },
   {
-    "prompt": "Substitute the word 'cat' with 'dog' in 'The cat sat on the mat with another cat'"
+    "prompt": "Reverse the string 'he said \"hello\" loudly'"
+  },
+  {
+    "prompt": "What's the weather in Casablanca today?"
   }
 ]

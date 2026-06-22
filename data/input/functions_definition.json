@@ -15,18 +15,6 @@
     }
   },
   {
-    "name": "fn_greet",
-    "description": "Generate a greeting message for a person by name.",
-    "parameters": {
-      "name": {
-        "type": "string"
-      }
-    },
-    "returns": {
-      "type": "string"
-    }
-  },
-  {
     "name": "fn_reverse_string",
     "description": "Reverse a string and return the reversed result.",
     "parameters": {
@@ -39,28 +27,57 @@
     }
   },
   {
-    "name": "fn_get_square_root",
-    "description": "Calculate the square root of a number.",
+    "name": "fn_set_temperature",
+    "description": "Set a thermostat to a whole-number temperature in a given unit.",
     "parameters": {
-      "a": {
-        "type": "number"
+      "value": {
+        "type": "int"
+      },
+      "unit": {
+        "type": "string",
+        "enum": ["celsius", "fahrenheit", "kelvin"]
       }
     },
     "returns": {
-      "type": "number"
+      "type": "boolean"
     }
   },
   {
-    "name": "fn_substitute_string_with_regex",
-    "description": "Replace all occurrences matching a regex pattern in a string.",
+    "name": "fn_toggle_feature",
+    "description": "Enable or disable a named feature flag.",
     "parameters": {
-      "source_string": {
+      "feature": {
         "type": "string"
       },
-      "regex": {
+      "enabled": {
+        "type": "boolean"
+      }
+    },
+    "returns": {
+      "type": "boolean"
+    }
+  },
+  {
+    "name": "fn_update_firmware",
+    "description": "Update a device firmware to one of the approved release versions.",
+    "parameters": {
+      "device": {
         "type": "string"
       },
-      "replacement": {
+      "firmware": {
+        "type": "string",
+        "enum": ["v1.0", "v2.0", "v3.0-beta"]
+      }
+    },
+    "returns": {
+      "type": "boolean"
+    }
+  },
+  {
+    "name": "fn_greet",
+    "description": "Generate a greeting message for a person by name.",
+    "parameters": {
+      "name": {
         "type": "string"
       }
     },

@@ -1,0 +1,96 @@
+[
+    {
+        "prompt": "What is the sum of 2.5 and 3.5?",
+        "name": "fn_add_numbers",
+        "parameters": {
+            "a": 2.5,
+            "b": 3.5
+        }
+    },
+    {
+        "prompt": "What is the sum of 999999999999 and 1?",
+        "name": "fn_add_numbers",
+        "parameters": {
+            "a": 999999999999.0,
+            "b": 1.0
+        }
+    },
+    {
+        "prompt": "What is the sum of -8 and 5?",
+        "name": "fn_add_numbers",
+        "parameters": {
+            "a": -8.0,
+            "b": 5.0
+        }
+    },
+    {
+        "prompt": "Add the two numbers together",
+        "name": "fn_add_numbers",
+        "parameters": {
+            "a": 1.0,
+            "b": 2.0
+        }
+    },
+    {
+        "prompt": "Set the temperature to 22 degrees celsius",
+        "name": "fn_set_temperature",
+        "parameters": {
+            "value": "22",
+            "unit": "celsius"
+        }
+    },
+    {
+        "prompt": "Set the thermostat to 451 fahrenheit",
+        "name": "fn_set_temperature",
+        "parameters": {
+            "value": "451",
+            "unit": "fahrenheit"
+        }
+    },
+    {
+        "prompt": "Enable the dark_mode feature",
+        "name": "fn_toggle_feature",
+        "parameters": {
+            "feature": "dark_mode",
+            "enabled": "true"
+        }
+    },
+    {
+        "prompt": "Turn off notifications",
+        "name": "fn_toggle_feature",
+        "parameters": {
+            "feature": "notifications",
+            "enabled": "false"
+        }
+    },
+    {
+        "prompt": "Update the firmware on device router7 to v2.0",
+        "name": "fn_update_firmware",
+        "parameters": {
+            "device": "router7",
+            "firmware": "v2.0"
+        }
+    },
+    {
+        "prompt": "Update the firmware on sensorX to the latest beta build",
+        "name": "fn_update_firmware",
+        "parameters": {
+            "device": "sensorX",
+            "firmware": "latest beta build"
+        }
+    },
+    {
+        "prompt": "Reverse the string 'he said \"hello\" loudly'",
+        "name": "fn_reverse_string",
+        "parameters": {
+            "s": "he said"
+        }
+    },
+    {
+        "prompt": "What's the weather in Casablanca today?",
+        "name": "fn_greet",
+        "parameters": {
+            "name": "Casablanca"
+        }
+    }
+]
