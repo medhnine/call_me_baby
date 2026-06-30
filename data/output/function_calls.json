@@ -1,96 +1,89 @@
 [
     {
-        "prompt": "What is the sum of 2.5 and 3.5?",
-        "name": "fn_add_numbers",
+        "prompt": "What is the product of 3 and 5?",
+        "name": "fn_multiply_numbers",
         "parameters": {
-            "a": 2.5,
-            "b": 3.5
-        }
-    },
-    {
-        "prompt": "What is the sum of 999999999999 and 1?",
-        "name": "fn_add_numbers",
-        "parameters": {
-            "a": 999999999999.0,
-            "b": 1.0
-        }
-    },
-    {
-        "prompt": "What is the sum of -8 and 5?",
-        "name": "fn_add_numbers",
-        "parameters": {
-            "a": -8.0,
+            "a": 3.0,
             "b": 5.0
         }
     },
     {
-        "prompt": "Add the two numbers together",
-        "name": "fn_add_numbers",
+        "prompt": "What is the product of 12 and 4?",
+        "name": "fn_multiply_numbers",
         "parameters": {
-            "a": 1.0,
-            "b": 2.0
+            "a": 12.0,
+            "b": 4.0
         }
     },
     {
-        "prompt": "Set the temperature to 22 degrees celsius",
-        "name": "fn_set_temperature",
+        "prompt": "Is 4 an even number?",
+        "name": "fn_is_even",
         "parameters": {
-            "value": "22",
-            "unit": "celsius"
+            "n": 4
         }
     },
     {
-        "prompt": "Set the thermostat to 451 fahrenheit",
-        "name": "fn_set_temperature",
+        "prompt": "Is 7 an even number?",
+        "name": "fn_is_even",
         "parameters": {
-            "value": "451",
-            "unit": "fahrenheit"
+            "n": 7
         }
     },
     {
-        "prompt": "Enable the dark_mode feature",
-        "name": "fn_toggle_feature",
+        "prompt": "Calculate compound interest on 1234567.89 at 0.0375 rate for 23 years",
+        "name": "fn_calculate_compound_interest",
         "parameters": {
-            "feature": "dark_mode",
-            "enabled": "true"
+            "principal": 1234567.89,
+            "rate": 0.0375,
+            "years": 23
         }
     },
     {
-        "prompt": "Turn off notifications",
-        "name": "fn_toggle_feature",
+        "prompt": "Execute SQL query 'SELECT * FROM users' on the production database",
+        "name": "fn_execute_sql_query",
         "parameters": {
-            "feature": "notifications",
-            "enabled": "false"
+            "query": "SELECT * FROM users",
+            "database": "production"
         }
     },
     {
-        "prompt": "Update the firmware on device router7 to v2.0",
-        "name": "fn_update_firmware",
+        "prompt": "Run the query 'INSERT INTO logs VALUES (1, 2, 3)' on the system database",
+        "name": "fn_execute_sql_query",
         "parameters": {
-            "device": "router7",
-            "firmware": "v2.0"
+            "query": "INSERT INTO logs VALUES (1, 2, 3)",
+            "database": "system"
         }
     },
     {
-        "prompt": "Update the firmware on sensorX to the latest beta build",
-        "name": "fn_update_firmware",
+        "prompt": "Read the file at /home/user/data.json with utf-8 encoding",
+        "name": "fn_read_file",
         "parameters": {
-            "device": "sensorX",
-            "firmware": "latest beta build"
+            "path": " /home/user/data.json",
+            "encoding": "utf-8"
         }
     },
     {
-        "prompt": "Reverse the string 'he said \"hello\" loudly'",
-        "name": "fn_reverse_string",
+        "prompt": "Read C:\\Users\\john\\config.ini with latin-1 encoding",
+        "name": "fn_read_file",
         "parameters": {
-            "s": "he said"
+            "path": "C:\\Users\\john\\config.ini",
+            "encoding": "latin-1"
         }
     },
     {
-        "prompt": "What's the weather in Casablanca today?",
-        "name": "fn_greet",
+        "prompt": "Format template: Hello {user}'s profile!",
+        "name": "fn_read_file",
         "parameters": {
-            "name": "Casablanca"
+            "path": "profile.txt",
+            "encoding": "utf-8"
+        }
+    },
+    {
+        "prompt": "Format template: Say \"hello\" to {name}",
+        "name": "fn_read_file",
+        "parameters": {
+            "path": "data",
+            "encoding": "utf-8"
         }
     }
 ]

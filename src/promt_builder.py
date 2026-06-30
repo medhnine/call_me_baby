@@ -12,6 +12,7 @@ def build_prompt(user_prompt: str, function_definitions: list[FunctionDefinition
         prompt += ": "  + fn.description
         prompt += ". Returns: " + fn.returns.type + '.\n\n'
     prompt += "User request: " + user_prompt + "\n"
+    print(prompt)
     return prompt
 
 def function_names(function_definitions: list[FunctionDefinition]):

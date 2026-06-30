@@ -75,9 +75,17 @@ class ConstrainedDecoder:
             #     next_token = max(allowd, key=lambda log : logits[log])
             # else:
             next_token = logits.index(max(logits))
-            # print(self.model.decode([next_token]))
             if '"' in self.model.decode(next_token):
-                return result
+                if len(self.model.decode(next_token)) == 1:
+                        return result
+                else:
+                    data : str = self.model.decode(next_token)
+                    i = data.index('"')
+                    r = data[:i]
+                    result.extend(self.model.encode(r).tolist()[0])
+                    return result
+                if len(self.model.decode(next_token)):
+                    return result
             else:
                 result.append(next_token)
  
@@ -91,12 +99,12 @@ class ConstrainedDecoder:
                     if pos + 1 <= len(fn.parameters):
                         res += '"'
                     self.force_tokens(res, input_ids)
-                    if val.type in ["number", "int", "float"]:
+                    if val.type in ["number", "integer", "float"]:
                         self.force_tokens(':', input_ids)
-                        if val.type == "int":
-                            output[key] = self.generate_number(input_ids, True)
+                        if val.type == "integer":
+                            output[key] = int(self.generate_number(input_ids, True))
                         else:
-                            output[key] = self.generate_number(input_ids, False)
+                            output[key] = float(self.generate_number(input_ids, False))
                         if pos < len(fn.parameters) - 1:
                             input_ids.append(self.model.encode(', ').tolist()[0][0])
                             input_ids.append(self.model.encode(' ').tolist()[0][0])
