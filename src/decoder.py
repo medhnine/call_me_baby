@@ -28,37 +28,27 @@ class ConstrainedDecoder:
     def force_tokens(self, tokens : str, input_ids):
         ids = self.model.encode(tokens).tolist()[0]
         input_ids.extend(ids)
-
-    def state_force(self, data:str, input_ids):
-        length = len(data)
-        count = 0
-        if data[length - 1] != '}':
-            count += 1
-        if data[length - 2] != '}':
-            count += 1
-        for _ in range(0, count):
-            self.force_tokens('}', input_ids)
             
     def generate_number(self, input_ids, point):
         result = []
+        digits = self.model.encode("0123456789").tolist()[0]
+        stop = self.model.encode(",}").tolist()[0]
+        minus = self.model.encode(" -").tolist()[0]
+        dot = self.model.encode(".").tolist()[0]
+        allowed = digits + stop + minus + dot
         while True:
             logits = self.model.get_logits_from_input_ids(input_ids + result)
-            next_token = logits.index(max(logits))
+            next_token = max(allowed, key=lambda log : logits[log])
             if ',' in self.model.decode([next_token]) or '}' in self.model.decode([next_token]):
-                res = self.model.decode(result)
-                num = ''
+                num = self.model.decode(result)
                 try:
-                    for chr in res:
-                        if chr in '.-0123456789':
-                            num += chr
-                    fl = num
                     if point == False:
-                        fl = float(num)
-                except Exception as e:
+                        num = float(num)
+                except ValueError as e:
                     print(e)
                     return
-                input_ids.extend(self.model.encode(' ' + str(fl)).tolist()[0])
-                return fl
+                input_ids.extend(self.model.encode(' ' + str(num)).tolist()[0])
+                return num
             else:
                 result.append(next_token)
 
@@ -66,16 +56,8 @@ class ConstrainedDecoder:
         result = []
         while True:
             logits = self.model.get_logits_from_input_ids(input_ids + result)
-            # if boolean:
-            #     allowd = self.model.encode("True").tolist()[0]
-            #     allowd += self.model.encode("False").tolist()[0]
-            #     allowd += self.model.encode(" false").tolist()[0]
-            #     allowd = self.model.encode(" true").tolist()[0]
-            #     allowd += self.model.encode('"').tolist()[0]
-            #     next_token = max(allowd, key=lambda log : logits[log])
-            # else:
             next_token = logits.index(max(logits))
-            if '"' in self.model.decode(next_token):
+            if '"' in self.model.decode(next_token) and ' "' != self.model.decode(next_token):
                 if len(self.model.decode(next_token)) == 1:
                         return result
                 else:
@@ -83,8 +65,6 @@ class ConstrainedDecoder:
                     i = data.index('"')
                     r = data[:i]
                     result.extend(self.model.encode(r).tolist()[0])
-                    return result
-                if len(self.model.decode(next_token)):
                     return result
             else:
                 result.append(next_token)
@@ -101,10 +81,15 @@ class ConstrainedDecoder:
                     self.force_tokens(res, input_ids)
                     if val.type in ["number", "integer", "float"]:
                         self.force_tokens(':', input_ids)
-                        if val.type == "integer":
-                            output[key] = int(self.generate_number(input_ids, True))
-                        else:
-                            output[key] = float(self.generate_number(input_ids, False))
+                        try:
+                            if val.type == "integer":
+                                value = self.generate_number(input_ids, True)
+                                output[key] = int(value)
+                            else:
+                                value = self.generate_number(input_ids, False)
+                                output[key] = float(value)
+                        except ValueError as e:
+                            print(e)
                         if pos < len(fn.parameters) - 1:
                             input_ids.append(self.model.encode(', ').tolist()[0][0])
                             input_ids.append(self.model.encode(' ').tolist()[0][0])

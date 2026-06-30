@@ -1,5 +1,20 @@
 [
   {
+    "name": "fn_multiply_numbers",
+    "description": "Multiply two numbers together and return their product.",
+    "parameters": {
+      "a": {
+        "type": "number"
+      },
+      "b": {
+        "type": "number"
+      }
+    },
+    "returns": {
+      "type": "number"
+    }
+  },
+  {
     "name": "fn_is_even",
     "description": "Check if an integer is even, returns True if even, False if odd.",
     "parameters": {

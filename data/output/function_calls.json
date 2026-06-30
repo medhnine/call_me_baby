@@ -72,18 +72,16 @@
     },
     {
         "prompt": "Format template: Hello {user}'s profile!",
-        "name": "fn_read_file",
+        "name": "fn_format_template",
         "parameters": {
-            "path": "profile.txt",
-            "encoding": "utf-8"
+            "template": "Hello {user}'s profile!"
         }
     },
     {
         "prompt": "Format template: Say \"hello\" to {name}",
-        "name": "fn_read_file",
+        "name": "fn_format_template",
         "parameters": {
-            "path": "data",
-            "encoding": "utf-8"
+            "template": "Say \"hello"
         }
     }
 ]

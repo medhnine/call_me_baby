@@ -5,14 +5,14 @@ def build_prompt(user_prompt: str, function_definitions: list[FunctionDefinition
     for fn in function_definitions:
         prompt += '- ' + fn.name
         prompt += "("
-        for key , value in fn.parameters.items():
+        for _ , value in fn.parameters.items():
             prompt += f"{value.type}" + ', '
         prompt = prompt[:-2]
         prompt += ')'
         prompt += ": "  + fn.description
         prompt += ". Returns: " + fn.returns.type + '.\n\n'
     prompt += "User request: " + user_prompt + "\n"
-    print(prompt)
+    prompt += "Select the single best function for the user request.\n"
     return prompt
 
 def function_names(function_definitions: list[FunctionDefinition]):

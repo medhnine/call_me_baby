@@ -11,7 +11,6 @@ def load_vocabulary():
     print(result)
     ids_lis = model.encode("what is the capital of paris ?")
     re1 = model.get_logits_from_input_ids(ids_lis[0].tolist())
-    # print(ids_lis)
     re = model.decode(max(re1[0]))
     print(re)
 load_vocabulary()

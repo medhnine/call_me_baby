@@ -70,12 +70,6 @@ def main() -> None:
             "parameters": parm
             }
         list_objects.append(res)
-        data = model.decode(input_ids[input_ids.index(add[0]):])
-        print()
-        print(data)
-        print()
-        print(res)
-
     with open(args.output, "w") as f:
         json.dump(list_objects, f, indent=4)
    
