@@ -39,9 +39,18 @@ def load_promts(path:str)-> list[Prompt]:
 
 def load_function_definitions(path:str)-> list[FunctionDefinition]:
     functions = []
+    d1: dict = {
+    "name": "fn_unknown",
+    "description": "Fallback function to use when no other function is appropriate for the user's prompt.",
+    "parameters": {},
+    "returns": {
+      "type": "string"
+    }
+  }
     try:
         with open(path, "r") as f:
             data = json.load(f)
+        data.append(d1)
         for item in data:
             fn = FunctionDefinition(**item)
             functions.append(fn)

@@ -1,11 +1,8 @@
 [
     {
-        "prompt": "What is the product of 3 and 5?",
-        "name": "fn_multiply_numbers",
-        "parameters": {
-            "a": 3.0,
-            "b": 5.0
-        }
+        "prompt": "apples are wonderfll",
+        "name": "fn_unknown",
+        "parameters": {}
     },
     {
         "prompt": "What is the product of 12 and 4?",
@@ -66,7 +63,7 @@
         "prompt": "Read C:\\Users\\john\\config.ini with latin-1 encoding",
         "name": "fn_read_file",
         "parameters": {
-            "path": "C:\\Users\\john\\config.ini",
+            "path": "C:\\\\Users\\\\john\\\\config.ini",
             "encoding": "latin-1"
         }
     },
@@ -81,7 +78,7 @@
         "prompt": "Format template: Say \"hello\" to {name}",
         "name": "fn_format_template",
         "parameters": {
-            "template": "Say \"hello"
+            "template": "Say {name} to {user}"
         }
     }
 ]

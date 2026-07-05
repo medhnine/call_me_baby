@@ -5,9 +5,12 @@ def build_prompt(user_prompt: str, function_definitions: list[FunctionDefinition
     for fn in function_definitions:
         prompt += '- ' + fn.name
         prompt += "("
+        i = 0
         for _ , value in fn.parameters.items():
-            prompt += f"{value.type}" + ', '
-        prompt = prompt[:-2]
+            prompt += value.type
+            if i != len(fn.parameters) - 1:
+                prompt += ', '
+            i += 1
         prompt += ')'
         prompt += ": "  + fn.description
         prompt += ". Returns: " + fn.returns.type + '.\n\n'
