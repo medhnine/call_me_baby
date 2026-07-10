@@ -10,9 +10,8 @@ import json
 import os
 
 os.makedirs("data/output", exist_ok=True)
-def parse_arguments() -> argparse.Namespace:
+def parse_arguments() -> argparse.Namespace: 
     """Parse command line arguments.
-
     Returns:
         Parsed arguments namespace.
     """

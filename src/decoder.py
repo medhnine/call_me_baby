@@ -31,7 +31,7 @@ class ConstrainedDecoder:
         ids = self.model.encode(tokens).tolist()[0]
         input_ids.extend(ids)
             
-    def generate_number(self, input_ids, point):
+    def generate_number(self, input_ids):
         result = []
         digits = self.model.encode("0123456789").tolist()[0]
         stop = self.model.encode(",}").tolist()[0]
@@ -59,12 +59,12 @@ class ConstrainedDecoder:
         while True:
             logits = self.model.get_logits_from_input_ids(input_ids + result)
             next_token = logits.index(max(logits))
-            if '"' in self.model.decode(next_token) and ' "' != self.model.decode(next_token):
-                if len(self.model.decode(next_token)) == 1:
+            if '"' in self.model.decode([next_token]) and ' "' != self.model.decode([next_token]):
+                if len(self.model.decode([next_token])) == 1:
                         input_ids.extend(result)
                         return result
                 else:
-                    data : str = self.model.decode(next_token)
+                    data : str = self.model.decode([next_token])
                     i = data.index('"')
                     r = data[:i]
                     result.extend(self.model.encode(r).tolist()[0])
@@ -79,18 +79,15 @@ class ConstrainedDecoder:
                 pos = 0
                 output = {}
                 for key , val in fn.parameters.items():
-                    res = '"' + key
-                    if pos + 1 <= len(fn.parameters):
-                        res += '"'
+                    res = '"' + key + '"'
                     self.force_tokens(res, input_ids)
                     if val.type in ["number", "integer", "float"]:
                         self.force_tokens(':', input_ids)
                         try:
+                            value = self.generate_number(input_ids)
                             if val.type == "integer":
-                                value = self.generate_number(input_ids, True)
-                                output[key] = int(value)
+                                output[key] = int(float(value))
                             else:
-                                value = self.generate_number(input_ids, False)
                                 output[key] = float(value)
                         except ValueError as e:
                             print(e)
@@ -104,9 +101,9 @@ class ConstrainedDecoder:
                         self.force_tokens(': ', input_ids)
                         input_ids.append(self.model.encode('"').tolist()[0][0])
                         res = self.model.decode(self.generate_string(input_ids))
-                        if res == "true":
+                        if res in ["true", "True"]:
                             output[key] = True
-                        elif res == "false":
+                        elif res in ["false", "False"]:
                             output[key] = False
                         else:
                             output[key] = res

@@ -1,7 +1,7 @@
 import json
 import sys
 from typing import Dict
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 
 class ParameterType(BaseModel):
     type: str
@@ -54,6 +54,9 @@ def load_function_definitions(path:str)-> list[FunctionDefinition]:
         for item in data:
             fn = FunctionDefinition(**item)
             functions.append(fn)
+    except ValidationError as e:
+        print(f"an error has been aquired {e}")
+        sys.exit(1)
     except FileNotFoundError as e:
         print(f"an error has been aquired {e}")
         sys.exit(1)
