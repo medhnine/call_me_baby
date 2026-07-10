@@ -1,84 +1,88 @@
 [
     {
-        "prompt": "apples are wonderfll",
+        "prompt": "What is the sum of 2.5 and 3.5?",
+        "name": "fn_add_numbers",
+        "parameters": {
+            "b": 2.5
+        }
+    },
+    {
+        "prompt": "What is the sum of 999999999999 and 1?",
+        "name": "fn_add_numbers",
+        "parameters": {
+            "b": 999999999999.0
+        }
+    },
+    {
+        "prompt": "What is the sum of -8 and 5?",
+        "name": "fn_add_numbers",
+        "parameters": {
+            "b": -8.0
+        }
+    },
+    {
+        "prompt": "Add the two numbers together",
+        "name": "fn_add_numbers",
+        "parameters": {
+            "b": 1.0
+        }
+    },
+    {
+        "prompt": "Set the temperature to 22 degrees celsius",
+        "name": "fn_set_temperature",
+        "parameters": {
+            "unit": "celsius"
+        }
+    },
+    {
+        "prompt": "Set the thermostat to 451 fahrenheit",
+        "name": "fn_set_temperature",
+        "parameters": {
+            "unit": "fahrenheit"
+        }
+    },
+    {
+        "prompt": "Enable the dark_mode feature",
+        "name": "fn_toggle_feature",
+        "parameters": {
+            "feature": "dark_mode",
+            "enabled": true
+        }
+    },
+    {
+        "prompt": "Turn off notifications",
+        "name": "fn_toggle_feature",
+        "parameters": {
+            "feature": "notifications",
+            "enabled": false
+        }
+    },
+    {
+        "prompt": "Update the firmware on device router7 to v2.0",
+        "name": "fn_update_firmware",
+        "parameters": {
+            "device": "router7",
+            "firmware": "v2.0"
+        }
+    },
+    {
+        "prompt": "Update the firmware on sensorX to the latest beta build",
+        "name": "fn_update_firmware",
+        "parameters": {
+            "device": "sensorX",
+            "firmware": "latest beta build"
+        }
+    },
+    {
+        "prompt": "Reverse the string 'he said \"hello\" loudly'",
+        "name": "fn_reverse_string",
+        "parameters": {
+            "s": "he said \"hello"
+        }
+    },
+    {
+        "prompt": "What's the weather in Casablanca today?",
         "name": "fn_unknown",
         "parameters": {}
-    },
-    {
-        "prompt": "What is the product of 12 and 4?",
-        "name": "fn_multiply_numbers",
-        "parameters": {
-            "a": 12.0,
-            "b": 4.0
-        }
-    },
-    {
-        "prompt": "Is 4 an even number?",
-        "name": "fn_is_even",
-        "parameters": {
-            "n": 4
-        }
-    },
-    {
-        "prompt": "Is 7 an even number?",
-        "name": "fn_is_even",
-        "parameters": {
-            "n": 7
-        }
-    },
-    {
-        "prompt": "Calculate compound interest on 1234567.89 at 0.0375 rate for 23 years",
-        "name": "fn_calculate_compound_interest",
-        "parameters": {
-            "principal": 1234567.89,
-            "rate": 0.0375,
-            "years": 23
-        }
-    },
-    {
-        "prompt": "Execute SQL query 'SELECT * FROM users' on the production database",
-        "name": "fn_execute_sql_query",
-        "parameters": {
-            "query": "SELECT * FROM users",
-            "database": "production"
-        }
-    },
-    {
-        "prompt": "Run the query 'INSERT INTO logs VALUES (1, 2, 3)' on the system database",
-        "name": "fn_execute_sql_query",
-        "parameters": {
-            "query": "INSERT INTO logs VALUES (1, 2, 3)",
-            "database": "system"
-        }
-    },
-    {
-        "prompt": "Read the file at /home/user/data.json with utf-8 encoding",
-        "name": "fn_read_file",
-        "parameters": {
-            "path": " /home/user/data.json",
-            "encoding": "utf-8"
-        }
-    },
-    {
-        "prompt": "Read C:\\Users\\john\\config.ini with latin-1 encoding",
-        "name": "fn_read_file",
-        "parameters": {
-            "path": "C:\\\\Users\\\\john\\\\config.ini",
-            "encoding": "latin-1"
-        }
-    },
-    {
-        "prompt": "Format template: Hello {user}'s profile!",
-        "name": "fn_format_template",
-        "parameters": {
-            "template": "Hello {user}'s profile!"
-        }
-    },
-    {
-        "prompt": "Format template: Say \"hello\" to {name}",
-        "name": "fn_format_template",
-        "parameters": {
-            "template": "Say {name} to {user}"
-        }
     }
 ]

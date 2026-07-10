@@ -10,6 +10,7 @@ class ConstrainedDecoder:
     def generate_function_name(self, input_ids: list[int], function_names: list[str]) -> str:
         pos = 0
         fn_ids = []
+        result = []
         for fn in function_names:
             token_list = self.model.encode(fn).tolist()[0]
             fn_ids.append(token_list)
@@ -19,8 +20,9 @@ class ConstrainedDecoder:
             next_token = self.filter_logits(input_ids, store)
             fn_ids = [fn for fn in fn_ids if pos < len(fn) and fn[pos] == next_token]
             input_ids.append(next_token)
+            result.append(next_token)
             if self.model.decode([next_token]) == '"':
-                return (self.model.decode(fn_ids[0][:-1]))
+                return (self.model.decode(result[:-1]))
             if not fn_ids:
                 raise ValueError(f"No surviving function after pruning at position {pos}")
             pos += 1
@@ -40,31 +42,33 @@ class ConstrainedDecoder:
             logits = self.model.get_logits_from_input_ids(input_ids + result)
             next_token = max(allowed, key=lambda log : logits[log])
             if ',' in self.model.decode([next_token]) or '}' in self.model.decode([next_token]):
-                num = self.model.decode(result)
-                try:
-                    if point == False:
-                        num = float(num)
-                except ValueError as e:
-                    print(e)
-                    return
-                input_ids.extend(self.model.encode(' ' + str(num)).tolist()[0])
-                return num
+                # num = self.model.decode(result)
+                # try:
+                #     if point == False:
+                #         num = float(num)
+                # except ValueError as e:
+                #     print(e)
+                #     return
+                input_ids.extend(result)
+                return self.model.decode(result)
             else:
                 result.append(next_token)
 
-    def generate_string(self, input_ids, boolean):
+    def generate_string(self, input_ids):
         result = []
         while True:
             logits = self.model.get_logits_from_input_ids(input_ids + result)
             next_token = logits.index(max(logits))
             if '"' in self.model.decode(next_token) and ' "' != self.model.decode(next_token):
                 if len(self.model.decode(next_token)) == 1:
+                        input_ids.extend(result)
                         return result
                 else:
                     data : str = self.model.decode(next_token)
                     i = data.index('"')
                     r = data[:i]
                     result.extend(self.model.encode(r).tolist()[0])
+                    input_ids.extend(result)
                     return result
             else:
                 result.append(next_token)
@@ -99,12 +103,13 @@ class ConstrainedDecoder:
                     if val.type in ["string", "boolean"]:
                         self.force_tokens(': ', input_ids)
                         input_ids.append(self.model.encode('"').tolist()[0][0])
-                        if val.type == "boolean":
-                            res = self.generate_string(input_ids, True)
+                        res = self.model.decode(self.generate_string(input_ids))
+                        if res == "true":
+                            output[key] = True
+                        elif res == "false":
+                            output[key] = False
                         else:
-                            res = self.generate_string(input_ids, False)
-                        output[key] = self.model.decode(res)
-                        input_ids.extend(res)
+                            output[key] = res
                         input_ids.append(self.model.encode('"').tolist()[0][0])
                         if pos < len(fn.parameters) - 1:
                             input_ids.append(self.model.encode(',').tolist()[0][0])
