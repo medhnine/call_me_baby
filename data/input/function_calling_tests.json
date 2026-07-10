@@ -1,38 +1,35 @@
 [
   {
-    "prompt": "What is the sum of 2.5 and 3.5?"
+    "prompt": "What is the product of 3 and 5?"
   },
   {
-    "prompt": "What is the sum of -99629900910 and 1?"
+    "prompt": "What is the product of 12 and 4?"
   },
   {
-    "prompt": "What is the sum of -8 and 5?"
+    "prompt": "Is 4 an even number?"
   },
   {
-    "prompt": "Add the two numbers together"
+    "prompt": "Is 7 an even number?"
   },
   {
-    "prompt": "Set the temperature to 22 degrees celsius"
+    "prompt": "Calculate compound interest on 1234567.89 at 0.0375 rate for 23 years"
   },
   {
-    "prompt": "Set the thermostat to 451 fahrenheit"
+    "prompt": "Execute SQL query 'SELECT * FROM users' on the production database"
   },
   {
-    "prompt": "Enable the dark_mode feature"
+    "prompt": "Run the query 'INSERT INTO logs VALUES (1, 2, 3)' on the system database"
   },
   {
-    "prompt": "Turn off notifications"
+    "prompt": "Read the file at /home/user/data.json with utf-8 encoding"
   },
   {
-    "prompt": "Update the firmware on device router7 to v2.0"
+    "prompt": "Read C:\\Users\\john\\config.ini with latin-1 encoding"
   },
   {
-    "prompt": "Update the firmware on sensorX to the latest beta build"
+    "prompt": "Format template: Hello {user}'s profile!"
   },
   {
-    "prompt": "Reverse the string 'he said \"hello\" loudly'"
-  },
-  {
-    "prompt": "What's the weather in Casablanca today?"
+    "prompt": "Format template: Say \"hello\" to {name}"
   }
 ]
