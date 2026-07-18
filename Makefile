@@ -1,4 +1,4 @@
-instal:
+install:
 	uv sync
 
 run:

@@ -1,16 +1,20 @@
 """Entry point for the call-me-maybe function calling system."""
 
 import argparse
-from .parser import load_function_definitions, load_promts
-from .function_caller import function_caller
-from .decoder import ConstrainedDecoder
-from llm_sdk import Small_LLM_Model
-from .promt_builder import function_names
 import json
 import os
 
+from llm_sdk import Small_LLM_Model  # type: ignore[attr-defined]
+
+from .decoder import ConstrainedDecoder
+from .function_caller import function_caller
+from .parser import load_function_definitions, load_promts
+from .promt_builder import function_names
+
 os.makedirs("data/output", exist_ok=True)
-def parse_arguments() -> argparse.Namespace: 
+
+
+def parse_arguments() -> argparse.Namespace:
     """Parse command line arguments.
     Returns:
         Parsed arguments namespace.
@@ -38,6 +42,7 @@ def parse_arguments() -> argparse.Namespace:
     )
     return parser.parse_args()
 
+
 def main() -> None:
     """Run the function calling pipeline."""
     args = parse_arguments()
@@ -53,16 +58,27 @@ def main() -> None:
         return
     model = Small_LLM_Model()
     decoder = ConstrainedDecoder(model)
+
     list_objects = []
     for i, x in zip(prompts, user_pormts):
         input_ids = model.encode(i).tolist()[0]
         add = model.encode('{"name": "').tolist()[0]
         input_ids.extend(add)
-        generated_name = decoder.generate_function_name(input_ids, fn_names)
-        target = f', "prompt": "{x.prompt}", '
-        decoder.force_tokens(target, input_ids)
-        decoder.force_tokens('"parameters": {', input_ids)
-        parm = decoder.generate_paramters(generated_name, function_definitions, input_ids)
+        try:
+            generated_name = decoder.generate_function_name(
+                input_ids, fn_names
+            )
+            target = (
+                f', "prompt": "{x.prompt}", '
+            )
+            decoder.force_tokens(target, input_ids)
+            decoder.force_tokens('"parameters": {', input_ids)
+            parm = decoder.generate_paramters(
+                generated_name, function_definitions, input_ids
+            )
+        except Exception as e:
+            print(f"error {e}")
+            exit(1)
         res = {
             "prompt": x.prompt,
             "name": generated_name,
@@ -71,7 +87,8 @@ def main() -> None:
         list_objects.append(res)
     with open(args.output, "w") as f:
         json.dump(list_objects, f, indent=4)
-   
+
+
 if __name__ == "__main__":
     try:
         main()
