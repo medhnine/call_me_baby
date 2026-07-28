@@ -7,6 +7,13 @@ from pydantic import BaseModel, ValidationError, model_validator
 class ParameterType(BaseModel):
     type: str
 
+    @model_validator(mode="after")
+    def verfy_len(self) -> "ParameterType":
+        res = self.type.strip()
+        if res is None or len(res) == 0:
+            raise ValueError("empty parameter type")
+        return self
+
 
 class ReturnType(BaseModel):
     type: str
@@ -17,6 +24,19 @@ class FunctionDefinition(BaseModel):
     description: str
     parameters: Dict[str, ParameterType]
     returns: ReturnType
+
+    @model_validator(mode="after")
+    def verfy_len(self) -> "FunctionDefinition":
+        name = self.name.strip()
+        description = self.description.strip()
+        if name is None or len(name) == 0:
+            raise ValueError("empty function name")
+        elif description is None or len(description) == 0:
+            raise ValueError("empty function description")
+        for p in self.parameters:
+            if p is None or len(p) == 0:
+                raise ValueError("empty prompt")
+        return self
 
 
 class Prompt(BaseModel):
